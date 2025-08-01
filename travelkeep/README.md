@@ -1,70 +1,157 @@
-# Getting Started with Create React App
+# TravelKeep
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A beautiful web application for keeping your travel memories organized. Built with React, Firebase, and Tailwind CSS.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- 🔐 **Google Authentication** - Secure login with Gmail
+- 📍 **Place Management** - Add and organize your travel destinations
+- 📸 **Photo Upload** - Upload and store photos for each place
+- 🎨 **Beautiful UI** - Modern design with Tailwind CSS
+- ☁️ **Cloud Storage** - Photos stored securely in Firebase Storage
+- 📱 **Responsive Design** - Works on all devices
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React.js, React Router, Tailwind CSS
+- **Backend**: Express.js, Node.js
+- **Database**: Firebase Firestore
+- **Authentication**: Firebase Auth (Google)
+- **Storage**: Firebase Storage
+- **Styling**: Tailwind CSS
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Prerequisites
 
-### `npm test`
+- Node.js (v14 or higher)
+- npm or yarn
+- Firebase account
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup Instructions
 
-### `npm run build`
+### 1. Clone and Install Dependencies
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd travelkeep
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. Firebase Configuration
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project
+3. Enable Authentication and select Google as a sign-in method
+4. Create a Firestore database
+5. Enable Storage
+6. Get your Firebase configuration
 
-### `npm run eject`
+### 3. Update Firebase Config
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Open `src/firebase.js` and replace the placeholder config with your actual Firebase configuration:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+const firebaseConfig = {
+  apiKey: "your-api-key",
+  authDomain: "your-project-id.firebaseapp.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project-id.appspot.com",
+  messagingSenderId: "your-messaging-sender-id",
+  appId: "your-app-id"
+};
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 4. Firebase Security Rules
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Update your Firestore security rules:
 
-## Learn More
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /places/{placeId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+  }
+}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Update your Storage security rules:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```javascript
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /places/{placeId}/{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
 
-### Code Splitting
+### 5. Run the Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### Development Mode (Frontend only)
+```bash
+npm start
+```
 
-### Analyzing the Bundle Size
+#### Development Mode (Frontend + Backend)
+```bash
+npm run dev
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### Production Build
+```bash
+npm run build
+npm run server
+```
 
-### Making a Progressive Web App
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+travelkeep/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── Login.js          # Google authentication
+│   │   ├── Home.js           # Main dashboard
+│   │   ├── PlaceDetail.js    # Place details and photo upload
+│   │   └── Navbar.js         # Navigation bar
+│   ├── App.js               # Main app component with routing
+│   ├── firebase.js          # Firebase configuration
+│   └── index.css            # Tailwind CSS imports
+├── server.js                # Express.js backend
+├── tailwind.config.js       # Tailwind configuration
+└── package.json
+```
 
-### Advanced Configuration
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1. **Sign In**: Click "Continue with Google" to authenticate
+2. **Add Places**: Click "Add New Place" to create a new travel destination
+3. **View Places**: Click on any place card to view details
+4. **Upload Photos**: In the place detail view, click "Choose Photos" to upload images
+5. **Navigate**: Use the navbar to move between pages
 
-### Deployment
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- `GET /api/health` - Health check
+- `POST /api/upload` - File upload (if needed)
 
-### `npm run build` fails to minify
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+If you encounter any issues, please create an issue in the repository.
+
+---
+
+Happy Traveling! ✈️📸
