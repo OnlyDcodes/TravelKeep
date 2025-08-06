@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Home from './components/Home';
 import PlaceDetail from './components/PlaceDetail';
 import Navbar from './components/Navbar';
+import Background3D from './components/Background3D';
 import './App.css';
 
 function App() {
@@ -23,34 +24,45 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <Background3D />
+        <div className="text-center relative z-10">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-maroon-600 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          </div>
+          <h2 className="text-xl font-semibold text-white mb-2 font-display drop-shadow-lg">TravelKeep</h2>
+          <p className="text-white/80 drop-shadow-lg">Loading your journey...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <Router>
-      <div className="App min-h-screen bg-gray-50">
-        {user && <Navbar user={user} />}
-        <Routes>
-          <Route 
-            path="/login" 
-            element={user ? <Navigate to="/" /> : <Login />} 
-          />
-          <Route 
-            path="/" 
-            element={user ? <Home user={user} /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="/place/:placeId" 
-            element={user ? <PlaceDetail user={user} /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="*" 
-            element={<Navigate to="/" />} 
-          />
-        </Routes>
+      <div className="App min-h-screen relative overflow-hidden">
+        <Background3D />
+        <div className="relative z-10">
+          {user && <Navbar user={user} />}
+          <Routes>
+            <Route 
+              path="/login" 
+              element={user ? <Navigate to="/" /> : <Login />} 
+            />
+            <Route 
+              path="/" 
+              element={user ? <Home user={user} /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/place/:placeId" 
+              element={user ? <PlaceDetail user={user} /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="*" 
+              element={<Navigate to="/" />} 
+            />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

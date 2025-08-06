@@ -68,7 +68,13 @@ const PlaceDetail = ({ user }) => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="text-center">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-maroon-600 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          </div>
+          <p className="text-white/80 drop-shadow-sm">Loading place details...</p>
+        </div>
       </div>
     );
   }
@@ -77,8 +83,13 @@ const PlaceDetail = ({ user }) => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Place not found</h2>
-          <Link to="/" className="text-blue-600 hover:text-blue-700">
+          <div className="w-20 h-20 glass-3d rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-glow">
+            <svg className="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-semibold text-white mb-4 font-display drop-shadow-lg">Place not found</h2>
+          <Link to="/" className="btn-3d">
             Back to Home
           </Link>
         </div>
@@ -90,20 +101,42 @@ const PlaceDetail = ({ user }) => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <Link to="/" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
-          ← Back to My Travels
+        <Link to="/" className="inline-flex items-center text-white/80 hover:text-white mb-6 group drop-shadow-sm">
+          <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to My Travels
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{place.name}</h1>
-        <p className="text-lg text-gray-600 mb-1">{place.location}</p>
-        {place.description && (
-          <p className="text-gray-500">{place.description}</p>
-        )}
+        <div className="glass-3d rounded-2xl shadow-soft p-8 border border-white/20">
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="w-12 h-12 glass rounded-xl flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white font-display drop-shadow-lg">{place.name}</h1>
+              <p className="text-lg text-white/80 font-medium drop-shadow-sm">{place.location}</p>
+            </div>
+          </div>
+          {place.description && (
+            <p className="text-white/70 bg-white/10 rounded-xl p-4 border-l-4 border-primary-400 drop-shadow-sm">{place.description}</p>
+          )}
+        </div>
       </div>
 
       {/* Upload Section */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Upload Photos</h2>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+      <div className="glass-3d rounded-2xl shadow-soft p-8 mb-8 border border-white/20">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-10 h-10 glass rounded-lg flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-semibold text-white font-display drop-shadow-sm">Upload Photos</h2>
+        </div>
+        <div className="border-2 border-dashed border-white/30 rounded-xl p-8 text-center hover:border-primary-300 transition-colors duration-200">
           <input
             type="file"
             multiple
@@ -115,57 +148,77 @@ const PlaceDetail = ({ user }) => {
           />
           <label
             htmlFor="photo-upload"
-            className={`cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md ${
+            className={`cursor-pointer inline-flex items-center px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
               uploading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
-            } transition-colors duration-200`}
+                ? 'bg-white/20 cursor-not-allowed text-white'
+                : 'btn-3d'
+            }`}
           >
             {uploading ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
                 Uploading...
               </>
             ) : (
               <>
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
                 Choose Photos
               </>
             )}
           </label>
-          <p className="text-sm text-gray-500 mt-2">
-            Select multiple photos to upload
+          <p className="text-sm text-white/60 mt-4 drop-shadow-sm">
+            Select multiple photos to upload and preserve your memories
           </p>
         </div>
       </div>
 
       {/* Photos Grid */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4">
-          Photos ({photos.length})
-        </h2>
+      <div className="glass-3d rounded-2xl shadow-soft p-8 border border-white/20">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 glass rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-semibold text-white font-display drop-shadow-sm">
+              Photos ({photos.length})
+            </h2>
+          </div>
+        </div>
         
         {photos.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">📸</div>
-            <h3 className="text-xl font-medium text-gray-900 mb-2">No photos yet</h3>
-            <p className="text-gray-600">Upload your first photo to start building memories!</p>
+          <div className="text-center py-16">
+            <div className="w-24 h-24 glass-3d rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-glow">
+              <span className="text-4xl">📸</span>
+            </div>
+            <h3 className="text-2xl font-semibold text-white mb-3 font-display drop-shadow-lg">No photos yet</h3>
+            <p className="text-white/80 mb-6 drop-shadow-sm">Upload your first photo to start building memories!</p>
+            <label
+              htmlFor="photo-upload"
+              className="btn-3d cursor-pointer inline-flex items-center"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Upload Your First Photo
+            </label>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {photos.map((photo, index) => (
-              <div key={index} className="relative group">
+              <div key={index} className="group relative overflow-hidden rounded-xl shadow-soft hover:shadow-glow transition-all duration-300 card-hover-3d">
                 <img
                   src={photo.url}
                   alt={photo.name}
-                  className="w-full h-48 object-cover rounded-lg shadow-md"
+                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded-lg flex items-center justify-center">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-center">
-                    <p className="text-sm font-medium">{photo.name}</p>
-                    <p className="text-xs">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                  <div className="p-4 text-white w-full">
+                    <p className="text-sm font-medium truncate drop-shadow-sm">{photo.name}</p>
+                    <p className="text-xs opacity-80 drop-shadow-sm">
                       {photo.uploadedAt.toLocaleDateString()}
                     </p>
                   </div>
